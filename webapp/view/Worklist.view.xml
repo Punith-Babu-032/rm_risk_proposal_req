@@ -1,0 +1,112 @@
+<mvc:View controllerName="gmriskproposal.controller.Worklist"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:upload="sap.m.upload">
+
+    <Page title="Risk Proposal Request" showNavButton="true" showHeader="false">
+        <content>
+            <ObjectHeader visible="{= ${appConfigModel>/app} === 'ApproveApp'}" icon="sap-icon://action-settings" iconDensityAware="false" imageShape="Circle" responsive="true" title="DIS_DP07_DP_Budget Proposal" intro="Budget Proposal is not relaisitc: It's over the budget" class="sapUiResponsivePadding--header" />
+            <Wizard id="proposeRiskWizard" currentStep="PricingStep" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="false">
+                <WizardStep id="proposeRiskBasicData" title="Propose a Risk">
+                    <f:SimpleForm id="SimpleFormChange354" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                        <f:content>
+                            <Label text="Name (Title)" design="Bold"/>
+                            <Input id="name" placeholder="Enter Risk Title" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/>
+                            <Label text="Description" design="Bold" />
+                            <TextArea value="" placeholder="Enter Risk Description" rows="3" editable="{= ${appConfigModel>/app} === 'RequestApp'}" />
+                            <Label text="Division" design="Bold"/>
+                            <!-- <Input value="" placeholder="Enter Division" showValueHelp="true" valueHelpOnly="true" /> -->
+                            <Select>
+                                <items>
+                                    <core:ListItem key="1" text="Unit Testing Organization" />
+                                    <core:ListItem key="2" text="Quality Analysis Organization" />
+                                </items>
+                            </Select>
+                            <Label text="Risk Tier" design="Bold"/>
+                            <Select>
+                                <items>
+                                    <core:ListItem key="1" text="Tier 1 - Divisional Risk" />
+                                    <core:ListItem key="2" text="Tier 2 - Divisional Risk" />
+                                    <core:ListItem key="3" text="Tier 3 - Divisional Risk" />
+                                </items>
+                            </Select>
+
+                            <!-- <Input value="" placeholder="Enter Risk Tier" showValueHelp="true" valueHelpOnly="true" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/> -->
+                            <Label text="Risk Category" design="Bold"/>
+                            <Select>
+                                <items>
+                                    <core:ListItem key="1" text="Risk Category 1 - Planning" />
+                                    <core:ListItem key="2" text="Risk Category 2 - Forecasting" />
+                                    <core:ListItem key="3" text="Risk Category 3 - Report" />
+                                </items>
+                            </Select>
+                            <!-- <Input value="" placeholder="Enter Risk Category" showValueHelp="true" valueHelpOnly="true" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/> -->
+                            <!-- <Label text="Causes" design="Bold"/>
+                            <Input value="" placeholder="Select Causes" showValueHelp="true" valueHelpOnly="true" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/>
+                            <TextArea value="" placeholder="Enter Causes Description" rows="3" />
+                            <Label text="Impacts" design="Bold"/>
+                            <Input value="" placeholder="Select Impacts" showValueHelp="true" valueHelpOnly="true" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/>
+                            <TextArea value="" placeholder="Enter Impacts Description" rows="3" editable="{= ${appConfigModel>/app} === 'RequestApp'}"/> -->
+                            <Label visible="{= ${appConfigModel>/app} === 'ApproveApp'}" text="Approved By" design="Bold"/>
+                            <Input visible="{= ${appConfigModel>/app} === 'ApproveApp'}" value="Risk Champion" editable="false"/>
+                            <Label visible="{= ${appConfigModel>/app} === 'ApproveApp'}" text="Approver Notes" design="Bold"/>
+                            <TextArea visible="{= ${appConfigModel>/app} === 'ApproveApp'}" value="" placeholder="Enter Approver Notes" rows="3" />
+                        </f:content>
+                    </f:SimpleForm>
+                </WizardStep>
+                <WizardStep id="causes" validated="true" title="Causes">
+                    <List items="{saveModel>/causes}" mode="Delete" delete="handleCauseDelete">
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <ToolbarSpacer />
+                                <Button icon="sap-icon://add" press="handleAddCauses" />
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <items>
+                            <StandardListItem title="{saveModel>causeText}"/>
+                        </items>
+                    </List>
+                </WizardStep>
+                <WizardStep id="impacts" validated="true" title="Impacts">
+                    <List items="{saveModel>/impacts}" mode="Delete" delete="handleImpactDelete">
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <ToolbarSpacer />
+                                <Button icon="sap-icon://add" press="handleAddImpacts" />
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <items>
+                            <StandardListItem title="{saveModel>impactText}"/>
+                        </items>
+                    </List>
+                </WizardStep>
+                <WizardStep id="PricingStep" title="Add Risk Attachments">
+                    <upload:UploadSet id="attachmentUploadSet" instantUpload="false" showIcons="true" uploadEnabled="true" terminationEnabled="true" fileTypes="txt,doc,png" maxFileNameLength="30" maxFileSize="200" mediaTypes="text/plain,application/msword,image/jpeg">
+                        <upload:toolbar>
+                            <OverflowToolbar>
+                                <Button id="uploadAttachmentAction" tooltip="Upload Selected" icon="sap-icon://upload-to-cloud" press="onUploadSelectedButton"/>
+                                <Button id="downloadAttachmentAction" tooltip="Download selected" icon="sap-icon://download-from-cloud" press="onDownloadSelectedButton"/>
+                            </OverflowToolbar>
+                        </upload:toolbar>
+                    </upload:UploadSet>
+                </WizardStep>
+            </Wizard>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <!-- <Button id="prevPageAction" text="Prev" type="Emphasized" press="goToPrevPage" /> -->
+                <ToolbarSpacer/>
+                <!-- <Button id="nextPageAction" text="Next" type="Emphasized" press="goToNextPage" /> -->
+                <Button id="submitPageAction" visible="{= ${appConfigModel>/app} === 'RequestApp'}" text="Submit" type="Accept" press="handleSubmitRiskProposal" />
+                <Button id="approvePageAction" visible="{= ${appConfigModel>/app} === 'ApproveApp'}" text="Approve" type="Accept" press="handleApproveRiskProposal" />
+                <Button id="rejectPageAction" visible="{= ${appConfigModel>/app} === 'ApproveApp'}" text="Reject" type="Reject" press="handleRejectRiskProposal" />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
+
+
